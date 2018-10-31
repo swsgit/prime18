@@ -10,12 +10,11 @@ typedef unsigned __int128 u128;
 #ifdef WIN32
 
 #include <windows.h>
-double get_time()
-{
-    LARGE_INTEGER t, f;
-    QueryPerformanceCounter(&t);
-    QueryPerformanceFrequency(&f);
-    return (double)t.QuadPart/(double)f.QuadPart;
+double get_time() {
+  LARGE_INTEGER t, f;
+  QueryPerformanceCounter(&t);
+  QueryPerformanceFrequency(&f);
+  return (double)t.QuadPart / (double)f.QuadPart;
 }
 
 #else
@@ -23,12 +22,11 @@ double get_time()
 #include <sys/time.h>
 #include <sys/resource.h>
 
-double get_time()
-{
-    struct timeval t;
-    struct timezone tzp;
-    gettimeofday(&t, &tzp);
-    return t.tv_sec + t.tv_usec*1e-6;
+double get_time() {
+  struct timeval t;
+  struct timezone tzp;
+  gettimeofday(&t, &tzp);
+  return t.tv_sec + t.tv_usec * 1e-6;
 }
 
 #endif
@@ -46,20 +44,19 @@ int get_option(void) {
   printf("Enter option [1, 2, 3] > ");
   scanf("%d", &opt);
   return (opt < 1 || opt > 3) ? -1 : opt;
-
 }
 
 u32 lucas_lehmer(u32 p) {
-  u128 s = 4; 
+  u128 s = 4;
   u128 M = 1;
   for (size_t i = 0; i < p; i++) {
-  	 M = M * 2;
+    M = M * 2;
   }
   M = M - 1;
   for (size_t i = 0; i < p - 2; i++) {
-	  s = ((s * s) - 2) % M;
+    s = ((s * s) - 2) % M;
   }
-  
+
   return s == 0 ? p : 0;
 }
 
@@ -71,7 +68,7 @@ void run(size_t size) {
   prime = malloc((size) * sizeof(*prime));
   #pragma omp parallel for
   for (p = 3; p < size; p++) {
-    prime[p-3] = lucas_lehmer(p);
+    prime[p - 3] = lucas_lehmer(p);
   }
   free(prime);
 
@@ -88,18 +85,18 @@ int main(void) {
     printf("Invalid Selection\n");
     return 1;
   }
-  switch(opt) {
-    case 1:
-      run(24000);
-      break;
-    case 2:
-      run(240000);
-      break;
-    case 3:
-      run(2400000);
-      break;
-    default:
-      return 1;
+  switch (opt) {
+  case 1:
+    run(24000);
+    break;
+  case 2:
+    run(240000);
+    break;
+  case 3:
+    run(2400000);
+    break;
+  default:
+    return 1;
   }
 
   return 0;

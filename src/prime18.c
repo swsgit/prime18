@@ -4,7 +4,7 @@
 #include <inttypes.h>
 #include <omp.h>
 
-typedef uint64_t u32;
+typedef uint64_t u64;
 typedef unsigned __int128 u128;
 
 #ifdef WIN32
@@ -46,7 +46,7 @@ int get_option(void) {
   return (opt < 1 || opt > 3) ? -1 : opt;
 }
 
-u32 lucas_lehmer(u32 p) {
+u64 lucas_lehmer(u64 p) {
   u128 s = 4;
   u128 M = 1;
   for (size_t i = 0; i < p; i++) {
@@ -62,7 +62,7 @@ u32 lucas_lehmer(u32 p) {
 
 void run(size_t size) {
   double start, stop, elapsed;
-  u32 p, *prime;
+  u64 p, *prime;
 
   start = get_time();
   prime = malloc((size) * sizeof(*prime));
